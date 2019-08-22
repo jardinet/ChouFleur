@@ -12,7 +12,7 @@
 
 #include "fractol.h"
 
-void mandel(t_scale *s, t_win *w, int x, int y)
+int mandel(t_scale *s, int x, int y)
 {
     t_mbrot f;
     float tmp;
@@ -30,12 +30,10 @@ void mandel(t_scale *s, t_win *w, int x, int y)
         f.zi = 2 * f.zi * tmp + f.ci;
         i++;
     }
-    if (i == s->iter_max)
-        fill_img_buffer(w, x, y);
-
+    return (i);
 }
 
-void boat(t_scale *s, t_win *w, int x, int y)
+int boat(t_scale *s, int x, int y)
 {
     t_mbrot f;
     float tmp;
@@ -53,23 +51,17 @@ void boat(t_scale *s, t_win *w, int x, int y)
         f.zi = fabs(2 * f.zi * tmp + f.ci);
         i++;
     }
-    if (i == s->iter_max)
-        fill_img_buffer(w, x, y);
-
+    return (i);
 
 }
 
-void julia(t_scale *s, t_win *w, int x, int y)
+int julia(t_scale *s, t_win *w, int x, int y)
 {
     t_mbrot f;
     float tmp;
     int i;
 
     f = w->f;
-    // printf("%f\t%f\n", f.cr, f.ci);
-    // f.cr = -0.75;
-    // f.ci = 0.1;
-
     f.zr = x / s->zoom_x + s->xmin;
     f.zi = y / s->zoom_y + s->ymin;
     i = 0;
@@ -80,16 +72,42 @@ void julia(t_scale *s, t_win *w, int x, int y)
         f.zi = 2 * f.zi * tmp + f.ci;
         i++;
     }
-    if (i == s->iter_max)
-        fill_img_buffer(w, x, y);
+    return (i);
+}
 
+int		glow(int c1, int c2, float perc)
+{
+	return (((int)((c1 & 0xFF) * perc + (c2 & 0xFF) * (1 - perc)) & 0xFF)
+		| ((int)((c1 & 0xFF00) * perc + (c2 & 0xFF00) * (1 - perc)) & 0xFF00)
+		| ((int)((c1 & 0xFF0000) * perc + (c2 & 0xFF0000) * (1 - perc))
+			& 0xFF0000)
+		| ((int)((c1 & 0xFF000000) * perc + (c2 & 0xFF000000) * (1 - perc))
+			& 0xFF000000));
+}
+
+int						rainbow_color(int i, t_win *w)
+{
+	register double		c;
+	register int		red;
+	register int		green;
+	register int		blue;
+    
+	if (i == w->s.iter_max)
+		return (0);
+	c = (i + 1);
+    
+	red = cos(c) * 127 + 128;
+	green = cos(c + 2) * 127 + 128;
+	blue = cos(c + 2 + 2) * 127 + 128;
+	return ((red << 16) + (blue << 8) + green);
 }
 
 void fractal(t_win *w) 
 {
     int x;
     int y;
-
+    int color;
+    int i;
 
     x = -1;
     while (++x < WINX)
@@ -98,14 +116,24 @@ void fractal(t_win *w)
         while (++y < WINY)
         {
             if (w->fractal == MANDEL)
-            mandel(&w->s, w, x, y);
+               i = mandel(&w->s, x, y);
             else if (w->fractal == JULIA)
-            julia(&w->s, w, x, y);
+                i = julia(&w->s, w, x, y);
             else
-            boat(&w->s, w, x, y);
+                i = boat(&w->s, x, y);
+
+            // color = rainbow_color(i, w);
+            color = 0;
+
+        if (i == w->s.iter_max)
+            fill_img_buffer(w, x, y, color);
+        else
+            {
+                color = ((0 << 16) + (0 << 8) + (i * 255/ w->s.iter_max));
+                fill_img_buffer(w, x, y, color);
+            }
         }
     }
-    // affichage(w);
 }
 
 

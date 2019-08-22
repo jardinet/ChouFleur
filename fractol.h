@@ -33,6 +33,11 @@
 # define MOTION_NOTIFY			6
 # define PTR_MOTION_MASK		(1L << 6)
 
+# define LEFT_CLIC	1
+# define RIGHT_CLIC	2
+# define SCROLL_DW	4
+# define SCROLL_UP	5
+
 typedef struct s_scale
 {
 	float		xmin;
@@ -58,7 +63,6 @@ typedef struct s_mbrot
 	float			ci;
 	float			zr;
 	float			zi;
-	// int			iter;
 }				t_mbrot;
 
 typedef struct	s_win
@@ -79,6 +83,6 @@ typedef struct	s_win
 void			init_window(t_win *w);
 void			affichage(t_win *w);
 void 			fractal(t_win *w);
-void			fill_img_buffer(t_win *w, int x, int y);
+void			fill_img_buffer(t_win *w, int x, int y, int color);
 
 #endif

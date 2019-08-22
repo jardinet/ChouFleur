@@ -12,19 +12,19 @@
 
 #include "fractol.h"
 
-void	fill_img_buffer(t_win *w, int x, int y)
+void			fill_img_buffer(t_win *w, int x, int y, int color)
 {
-	int position;
-	char color = (char)255;
+	int	position;
+	int	*ptr;
 
 	if (0 <= x && x < WINX && 0 <= y && y < WINY)
 	{
-		position = y * w->sizeline + (x * 4);
-		w->buff[position] = color;
-		w->buff[position + 1] = color;
-		w->buff[position + 2] = color;
+		position = y * WINX * 4 + x * 4;
+		ptr = (int *)(void*)&w->buff[position];
+		*ptr = color;
 	}
 }
+
 
 int		choose_fractal(char *s, t_win *w)
 {
@@ -34,8 +34,10 @@ int		choose_fractal(char *s, t_win *w)
 	return (w->fractal = JULIA);
 	else if (!ft_strcmp(s, "boat"))
 	return (w->fractal = BOAT);
-	else 
+	else {
+ft_putendl("Please specify either mandelbrot, julia, or boat");
 	return 0;
+	}
 
 }
 
