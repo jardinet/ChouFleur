@@ -48,6 +48,8 @@ t_scale init_scale(void)
     s.ymin = -1.2;
     s.ymax = 1.2;
     s.iter_max = 16;
+	s.mx = 0;
+	s.my = 0;
     s.zoom_x = (float)WINX / (s.xmax - s.xmin);
     s.zoom_y = (float)WINY / (s.ymax - s.ymin);
 	return s;

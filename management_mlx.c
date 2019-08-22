@@ -24,7 +24,9 @@ static int		reset(t_win *w)
 
 int		key_events(int key, t_win *w)
 {
-	printf("key %d\n", key);
+	float k;
+
+	k = 0.2 * (w->s.xmax - w->s.xmin);
 	if (key == ESC)
 		exit(0);
 	if (key == KSPACE)
@@ -34,20 +36,20 @@ int		key_events(int key, t_win *w)
 	if (key == MINUS && w->s.iter_max > 4)
 		w->s.iter_max /= 2;
 	if (key == RIGHT){
-		w->s.xmin += 0.2;
-		w->s.xmax += 0.2;
+		w->s.xmin += k;
+		w->s.xmax += k;
 	}
 		if (key == LEFT){
-		w->s.xmin -= 0.2;
-		w->s.xmax -= 0.2;
+		w->s.xmin -= k;
+		w->s.xmax -= k;
 	}
 	if (key == BOTTOM){
-		w->s.ymin += 0.2;
-		w->s.ymax += 0.2;
+		w->s.ymin += k;
+		w->s.ymax += k;
 	}
 	if (key == UP){
-		w->s.ymin -= 0.2;
-		w->s.ymax -= 0.2;
+		w->s.ymin -= k;
+		w->s.ymax -= k;
 	}
 
 	return (reset(w));
@@ -72,27 +74,44 @@ int						motion_hook(int x, int y, t_win *w)
 	return (reset(w));
 }
 
-int				mouse_hook(int button, int x, int y, t_win *w)
+t_scale		reset_scale(t_scale s, float cr, float ci)
+{
+	float dcr;
+	float dci;
+
+	dcr = cr / 2;
+	dci = ci / 2;
+
+	s.xmin = s.mx - dcr;
+	s.xmax = s.mx + dcr;
+	s.ymin = s.my - dci;
+	s.ymax = s.my + dci;
+	s.zoom_x = (float)WINX / (s.xmax - s.xmin);
+    s.zoom_y = (float)WINY / (s.ymax - s.ymin);
+	return s;	
+}
+int				mouse_hook(int key, int x, int y, t_win *w)
 {
 	t_scale s;
-
+	float cr;
+	float ci;
+	
 	s = w->s;
-	if ((button == LEFT_CLIC || button == SCROLL_UP) && x <= WINX && y <= WINY)
+	cr = s.xmax - s.xmin;
+	ci = s.ymax - s.ymin;
+	s.mx = (float)(cr / WINX) * x + s.xmin;
+	s.my = (float)(ci / WINY) * y + s.ymin;
+	if ((key == LEFT_CLIC || key == SCROLL_UP) && x <= WINX && y <= WINY)
 	{
-		
-		s.xmin = (x / s.zoom_x + s.xmin) - (x / s.zoom_x * 1.3);
-		s.ymin = (y / s.zoom_y + s.ymin) - (y / s.zoom_y * 1.3);
-		s.zoom_x *= 1.3;
-		s.zoom_y *= 1.3;
+		cr *= 0.8;
+		ci *= 0.8;
 	}
-	else if ((button == RIGHT_CLIC || button == SCROLL_DW) && x <= WINX && y <= WINY)
+	else if ((key == RIGHT_CLIC || key == SCROLL_DW) && x <= WINX && y <= WINY)
 	{
-		s.xmin = (x / s.zoom_x + s.xmin) - (x / s.zoom_x * 1.3);
-		s.ymin = (y / s.zoom_y + s.ymin) - (y / s.zoom_y * 1.3);
-		s.zoom_x /= 1.3;
-		s.zoom_y /= 1.3;
+		cr /= 0.8;
+		ci /= 0.8;
 	}
-	w->s = s;
+	w->s = reset_scale(s, cr, ci);
 	return (reset(w));
 }
 

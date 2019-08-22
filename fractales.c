@@ -87,18 +87,18 @@ int		glow(int c1, int c2, float perc)
 
 int						rainbow_color(int i, t_win *w)
 {
-	register double		c;
+	// register double		c;
 	register int		red;
 	register int		green;
 	register int		blue;
     
 	if (i == w->s.iter_max)
 		return (0);
-	c = (i + 1);
+	// c = (i + 1);
     
-	red = cos(c) * 127 + 128;
-	green = cos(c + 2) * 127 + 128;
-	blue = cos(c + 2 + 2) * 127 + 128;
+	red = cos(i + 1) * 127 + 128;
+	green = cos(i + 2) * 127 + 128;
+	blue = cos(i + 2 + 2) * 127 + 128;
 	return ((red << 16) + (blue << 8) + green);
 }
 
@@ -110,7 +110,7 @@ void fractal(t_win *w)
     int i;
 
     x = -1;
-    while (++x < WINX)
+    while (++x < WINX) 
     {
         y = -1;
         while (++y < WINY)
@@ -125,13 +125,15 @@ void fractal(t_win *w)
             color = rainbow_color(i, w);
             // color = 0;
 
-        if (i == w->s.iter_max)
-            fill_img_buffer(w, x, y, color);
-        else
-            {
-                color = ((0 << 16) + (0 << 8) + (i * 255/ w->s.iter_max));
+        // if (i == w->s.iter_max)
+        //     fill_img_buffer(w, x, y, color);
+        // else
+        //     {
+        //         color = ((0 << 16) + (0 << 8) + (i * 255/ w->s.iter_max));
                 fill_img_buffer(w, x, y, color);
-            }
+            // }
         }
     }
 }
+
+

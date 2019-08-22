@@ -57,6 +57,8 @@ typedef struct s_scale
 	float		ymax;
 	float		zoom_x;
 	float		zoom_y;
+	float		mx;
+	float		my;
 	float		iter_max;
 }				t_scale;
 
