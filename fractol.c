@@ -39,14 +39,32 @@ int		choose_fractal(char *s, t_win *w)
 
 }
 
+t_scale init_scale(void)
+{
+	t_scale s;
+
+	s.xmin = -1;
+    s.xmax = 1;
+    s.ymin = -1.2;
+    s.ymax = 1.2;
+    s.iter_max = 16;
+    s.zoom_x = (float)WINX / (s.xmax - s.xmin);
+    s.zoom_y = (float)WINY / (s.ymax - s.ymin);
+	return s;
+}
+
 int		main(int ac, char **argv)
 {
 	t_win win;
 
 	(void) argv;
+	win.f.cr = 0.285;
+    win.f.ci = 0.01;
+
 	if (ac == 2 && choose_fractal(argv[1], &win)) 
 	{
-		initialisation_window(&win);
+		init_window(&win);
+		win.s = init_scale();
 		fractal(&win);
 		affichage(&win);
 	}

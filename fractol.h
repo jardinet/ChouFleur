@@ -12,6 +12,7 @@
 
 #ifndef FRACTOL_H
 # define FRACTOL_H
+#include <stdio.h> //TOREMOVe
 
 # include "./libft/libft.h"
 # include "./minilibx/mlx.h"
@@ -29,6 +30,8 @@
 # define MANDEL 2
 # define BOAT 3
 
+# define MOTION_NOTIFY			6
+# define PTR_MOTION_MASK		(1L << 6)
 
 typedef struct s_scale
 {
@@ -41,12 +44,6 @@ typedef struct s_scale
 	float		iter_max;
 }				t_scale;
 
-// typedef struct s_julia
-// {
-// 	int			zr;
-// 	int			zi;
-// 	int			iter;
-// }				t_julia;
 
 /**
 * c for constant
@@ -72,12 +69,14 @@ typedef struct	s_win
 	void	*mlx_img;
 	char	*buff;
 
+	t_scale s;
+	t_mbrot f;
 	int		bpp;
 	int		sizeline;
 	int		endian;
 }				t_win;
 
-void			initialisation_window(t_win *w);
+void			init_window(t_win *w);
 void			affichage(t_win *w);
 void 			fractal(t_win *w);
 void			fill_img_buffer(t_win *w, int x, int y);
