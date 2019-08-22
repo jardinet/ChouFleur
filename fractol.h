@@ -23,12 +23,23 @@
 # define NOT_OK 1
 
 
-# define WINX 512
-# define WINY 512
+# define ESC 53
+# define PLUS 69
+# define MINUS 78
+
+# define LEFT 123
+# define RIGHT 124
+# define UP 126
+# define BOTTOM 125
+# define KSPACE 49
+
+
+# define WINX 1000
+# define WINY 1000
 
 # define JULIA 1
 # define MANDEL 2
-# define BOAT 3
+# define SHIP 3
 
 # define MOTION_NOTIFY			6
 # define PTR_MOTION_MASK		(1L << 6)
@@ -68,7 +79,7 @@ typedef struct s_mbrot
 typedef struct	s_win
 {
 	void	*id;
-	int		fractal; // JULIA/MANDEL/BOAT
+	int		fractal; // JULIA/MANDEL/SHIP
 	void	*win_ptr;
 	void	*mlx_img;
 	char	*buff;

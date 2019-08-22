@@ -32,21 +32,19 @@ int		choose_fractal(char *s, t_win *w)
 	return (w->fractal = MANDEL);
 	else if (!ft_strcmp(s, "julia"))
 	return (w->fractal = JULIA);
-	else if (!ft_strcmp(s, "boat"))
-	return (w->fractal = BOAT);
-	else {
-ft_putendl("Please specify either mandelbrot, julia, or boat");
-	return 0;
-	}
-
+	else if (!ft_strcmp(s, "ship"))
+	return (w->fractal = SHIP);
+	else if (!ft_strcmp(s, "usage"))
+	ft_strexit("Space to change fractal, (+/-) to change iterations, arrow key to move around");
+	return (0);
 }
 
 t_scale init_scale(void)
 {
 	t_scale s;
 
-	s.xmin = -1;
-    s.xmax = 1;
+	s.xmin = -2.1;
+    s.xmax = 0.6;
     s.ymin = -1.2;
     s.ymax = 1.2;
     s.iter_max = 16;
@@ -59,10 +57,8 @@ int		main(int ac, char **argv)
 {
 	t_win win;
 
-	(void) argv;
 	win.f.cr = 0.285;
     win.f.ci = 0.01;
-
 	if (ac == 2 && choose_fractal(argv[1], &win)) 
 	{
 		init_window(&win);
@@ -71,6 +67,6 @@ int		main(int ac, char **argv)
 		affichage(&win);
 	}
 	else
-		 ft_strexit("usage : please specify julia, mandelbrot or A COMPLETER");
+		 ft_strexit("Usage : Please specify either mandelbrot, julia or ship !\nFor help, type usage.");
 	return (0);
 }

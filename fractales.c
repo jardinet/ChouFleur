@@ -33,7 +33,7 @@ int mandel(t_scale *s, int x, int y)
     return (i);
 }
 
-int boat(t_scale *s, int x, int y)
+int ship(t_scale *s, int x, int y)
 {
     t_mbrot f;
     float tmp;
@@ -120,10 +120,10 @@ void fractal(t_win *w)
             else if (w->fractal == JULIA)
                 i = julia(&w->s, w, x, y);
             else
-                i = boat(&w->s, x, y);
+                i = ship(&w->s, x, y);
 
-            // color = rainbow_color(i, w);
-            color = 0;
+            color = rainbow_color(i, w);
+            // color = 0;
 
         if (i == w->s.iter_max)
             fill_img_buffer(w, x, y, color);
@@ -135,8 +135,3 @@ void fractal(t_win *w)
         }
     }
 }
-
-
-
-// void boat(void)
-// {}
