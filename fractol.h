@@ -12,16 +12,10 @@
 
 #ifndef FRACTOL_H
 # define FRACTOL_H
-#include <stdio.h> //TOREMOVe
 
 # include "./libft/libft.h"
 # include "./minilibx/mlx.h"
 # include <math.h>
-
-# define SPACE ' '
-# define OK 0
-# define NOT_OK 1
-
 
 # define ESC 53
 # define PLUS 69
@@ -31,8 +25,9 @@
 # define RIGHT 124
 # define UP 126
 # define BOTTOM 125
-# define KSPACE 49
-
+# define SPACE 49
+# define C 8
+# define S 1
 
 # define WINX 1000
 # define WINY 1000
@@ -49,53 +44,54 @@
 # define SCROLL_DW	4
 # define SCROLL_UP	5
 
-typedef struct s_scale
+typedef struct		s_scale
 {
-	float		xmin;
-	float		xmax;
-	float		ymin;
-	float		ymax;
-	float		zoom_x;
-	float		zoom_y;
-	float		mx;
-	float		my;
-	float		iter_max;
-}				t_scale;
+	double			xmin;
+	double			xmax;
+	double			ymin;
+	double			ymax;
+	double			zoom_x;
+	double			zoom_y;
+	double			mx;
+	double			my;
+	int				iter_max;
+}					t_scale;
 
-
-/**
-* c for constant
-* i for imaginary
-* r for real
-* z for complex
-**/
-
-typedef struct s_mbrot
+typedef struct		s_mbrot
 {
-	float			cr;
-	float			ci;
-	float			zr;
-	float			zi;
-}				t_mbrot;
+	double			cr;
+	double			ci;
+	double			zr;
+	double			zi;
+}					t_mbrot;
 
-typedef struct	s_win
+typedef struct		s_win
 {
-	void	*id;
-	int		fractal; // JULIA/MANDEL/SHIP
-	void	*win_ptr;
-	void	*mlx_img;
-	char	*buff;
+	void			*id;
+	int				fractal;
+	int				color_state;
+	int				stop;
+	void			*win_ptr;
+	void			*mlx_img;
+	char			*buff;
+	t_scale			s;
+	t_mbrot			f;
+	int				bpp;
+	int				sizeline;
+	int				endian;
+}					t_win;
 
-	t_scale s;
-	t_mbrot f;
-	int		bpp;
-	int		sizeline;
-	int		endian;
-}				t_win;
+void				init_window(t_win *w);
+void				affichage(t_win *w);
+void				fractal(t_win *w);
+void				fill_img_buffer(t_win *w, int x, int y, int color);
+t_scale				init_scale(void);
+int					reset(t_win *w);
 
-void			init_window(t_win *w);
-void			affichage(t_win *w);
-void 			fractal(t_win *w);
-void			fill_img_buffer(t_win *w, int x, int y, int color);
+int					key_events(int key, t_win *w);
+int					move_julia(int x, int y, t_win *w);
+int					mouse_hook(int key, int x, int y, t_win *w);
+
+void				set_color(t_win *w, int i, int x, int y);
 
 #endif

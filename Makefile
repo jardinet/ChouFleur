@@ -14,14 +14,16 @@ NAME= fractol
 
 SRC=	./fractol.c \
 		./management_mlx.c \
-		./fractales.c
+		./fractales.c \
+		./events.c \
+		./colors.c
 
 
 OBJ= $(SRC:.c=.o)
 
 INCLUDES= -I fractol.h
 
-FLAGS= -Wall -Wextra -Werror -fsanitize=address -g3
+FLAGS= -Wall -Wextra -Werror
 
 LIBMLXINC= -L ./minilibx -lmlx -framework OpenGL -framework AppKit
 LIBFTINC = -L ./libft -lft
